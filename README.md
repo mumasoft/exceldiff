@@ -18,17 +18,24 @@ A tool to compare two Excel worksheets and highlight differences with color-code
 
 ### Option 1: Standalone Executable (Recommended)
 
-Download the pre-built executable from the `dist/` directory and use it directly:
+Download the pre-built executable from the [latest release](https://github.com/mumasoft/exceldiff/releases/latest):
 
+**Available platforms:**
+- **Linux (x86_64)**: `exceldiff-linux`
+- **macOS (ARM64/M1/M2/M3)**: `exceldiff-macos`
+
+**Usage:**
 ```bash
+# Download from releases page, then:
+
 # Make it executable (macOS/Linux)
-chmod +x exceldiff
+chmod +x exceldiff-linux  # or exceldiff-macos
 
 # Move to a directory in your PATH (optional)
-sudo mv exceldiff /usr/local/bin/
+sudo mv exceldiff-linux /usr/local/bin/exceldiff
 
 # Or use directly
-./exceldiff file1.xlsx file2.xlsx
+./exceldiff-linux file1.xlsx file2.xlsx -o output.xlsx
 ```
 
 **No Python or dependencies required!** The executable includes everything needed to run.
@@ -189,6 +196,21 @@ class CSVReader(FileReader):
 - Python 3.8+
 - openpyxl >= 3.1.2
 - click >= 8.1.7
+
+## Releases
+
+Pre-built binaries are automatically created when a version tag is pushed:
+
+```bash
+# Create and push a version tag
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+This triggers a GitHub Actions workflow that:
+1. Builds executables for Linux (x86_64) and macOS (ARM64)
+2. Creates a GitHub release with the binaries attached
+3. Makes them available at: `https://github.com/mumasoft/exceldiff/releases`
 
 ## License
 
