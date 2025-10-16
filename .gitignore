@@ -36,6 +36,12 @@ wheels/
 test_*.xlsx
 diff_output.xlsx
 create_test_files.py
+standalone_test.xlsx
+
+# PyInstaller
+build/
+dist/
+*.spec
 
 # macOS
 .DS_Store

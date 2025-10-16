@@ -5,15 +5,37 @@ A tool to compare two Excel worksheets and highlight differences with color-code
 ## Features
 
 - Compare Excel (.xlsx) files worksheet by worksheet
+- Modified cells show both old and new values with red text and comments
 - Color-coded diff output:
-  - **No color**: Identical rows
-  - **Red cells**: Modified cells within a row
+  - **Modified cells**: Red text showing "old → new" with explanatory comment
   - **Yellow rows**: Rows removed in the second file
   - **Orange rows**: Rows added in the second file
 - Specify which worksheet to compare (defaults to first sheet)
+- Option to output only rows with differences (exclude identical rows)
 - Extensible architecture for adding support for other file formats
 
 ## Installation
+
+### Option 1: Standalone Executable (Recommended)
+
+Download the pre-built executable from the `dist/` directory and use it directly:
+
+```bash
+# Make it executable (macOS/Linux)
+chmod +x exceldiff
+
+# Move to a directory in your PATH (optional)
+sudo mv exceldiff /usr/local/bin/
+
+# Or use directly
+./exceldiff file1.xlsx file2.xlsx
+```
+
+**No Python or dependencies required!** The executable includes everything needed to run.
+
+### Option 2: Install from Source
+
+If you want to modify the code or build it yourself:
 
 1. Create and activate a virtual environment:
 ```bash
@@ -29,6 +51,23 @@ pip install -r requirements.txt
 3. Install the package:
 ```bash
 pip install -e .
+```
+
+### Building a Standalone Executable
+
+To build your own standalone executable:
+
+```bash
+# Activate virtual environment
+source venv/bin/activate
+
+# Install PyInstaller
+pip install pyinstaller
+
+# Build the executable
+pyinstaller exceldiff.spec
+
+# Executable will be in dist/exceldiff
 ```
 
 ## Usage
@@ -61,23 +100,49 @@ Compare specific sheets within the files:
 exceldiff file1.xlsx file2.xlsx --sheet1 "Sheet1" --sheet2 "Sheet1"
 ```
 
+### Show only differences
+
+Output only rows with differences (exclude identical rows):
+
+```bash
+exceldiff file1.xlsx file2.xlsx --diff-only
+```
+
+This is useful when comparing large files where you only want to see what changed.
+
+By default, when using `--diff-only`, the first row from the first file is included as a header row. To exclude the header:
+
+```bash
+exceldiff file1.xlsx file2.xlsx --diff-only --no-header
+```
+
 ### Full example
 
 ```bash
 exceldiff baseline.xlsx updated.xlsx \
   --output comparison.xlsx \
   --sheet1 "Q1 Data" \
-  --sheet2 "Q1 Data"
+  --sheet2 "Q1 Data" \
+  --diff-only
 ```
 
 ## Understanding the Output
 
-The tool generates an Excel file with the following color scheme:
+The tool generates an Excel file with the following formatting:
+
+### Modified Cells
+For cells with different values, the output shows:
+- Cell displays both values: `old_value → new_value` (separated by an arrow)
+- **Red text color** to indicate the cell has changed
+- **Cell comment** showing details: "Changed from: [old] To: [new]"
+
+Example: If a cell changed from "25" to "26", it will display as "25 → 26" in red text, with a comment showing the change details
+
+### Row Colors
 
 | Color | Meaning |
 |-------|---------|
 | No color | Row is identical in both files |
-| Red (individual cells) | Cells that have different values |
 | Yellow (entire row) | Row exists in file1 but not in file2 (removed) |
 | Orange (entire row) | Row exists in file2 but not in file1 (added) |
 

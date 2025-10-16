@@ -16,20 +16,22 @@ class RowDiff:
     """Represents the diff information for a single row."""
 
     def __init__(self, row_index: int, diff_type: DiffType, row_data: List[Any],
-                 modified_cells: List[int] = None):
+                 modified_cells: List[int] = None, original_row_data: List[Any] = None):
         """
         Initialize a RowDiff.
 
         Args:
             row_index: Index of the row in the result
             diff_type: Type of difference
-            row_data: The actual row data
+            row_data: The actual row data (new values)
             modified_cells: List of column indices that were modified (for MODIFIED type)
+            original_row_data: The original row data (old values, for MODIFIED type)
         """
         self.row_index = row_index
         self.diff_type = diff_type
         self.row_data = row_data
         self.modified_cells = modified_cells or []
+        self.original_row_data = original_row_data
 
 
 class WorksheetDiffer:
@@ -80,7 +82,7 @@ class WorksheetDiffer:
 
                 if match_idx is not None:
                     # Found a modified version
-                    result.append(RowDiff(idx1, DiffType.MODIFIED, sheet2_normalized[match_idx], modified_cells))
+                    result.append(RowDiff(idx1, DiffType.MODIFIED, sheet2_normalized[match_idx], modified_cells, row1))
                     processed_sheet1.add(idx1)
                     processed_sheet2.add(match_idx)
                 else:

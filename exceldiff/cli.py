@@ -28,7 +28,19 @@ from exceldiff.writer import ExcelDiffWriter
     default=None,
     help='Sheet name in second file (default: first sheet)'
 )
-def main(file1: str, file2: str, output: str, sheet1: str, sheet2: str):
+@click.option(
+    '--diff-only',
+    is_flag=True,
+    default=False,
+    help='Only output rows with differences (exclude identical rows)'
+)
+@click.option(
+    '--no-header',
+    is_flag=True,
+    default=False,
+    help='Do not include header row when using --diff-only'
+)
+def main(file1: str, file2: str, output: str, sheet1: str, sheet2: str, diff_only: bool, no_header: bool):
     """
     Compare two Excel worksheets and output differences to a new file.
 
@@ -96,9 +108,15 @@ def main(file1: str, file2: str, output: str, sheet1: str, sheet2: str):
         # Write output
         click.echo(f"\nWriting diff to {output}...")
         writer = ExcelDiffWriter()
-        writer.write(diffs, output)
+        writer.write(diffs, output, diff_only=diff_only, include_header=(diff_only and not no_header))
 
-        click.echo(f"\nDone! Diff written to {output}")
+        if diff_only:
+            output_rows = sum(1 for d in diffs if d.diff_type.value != 'identical')
+            if not no_header and len(diffs) > 0:
+                output_rows += 1  # Include header in count
+            click.echo(f"\nDone! Diff written to {output} ({output_rows} rows)")
+        else:
+            click.echo(f"\nDone! Diff written to {output}")
 
     except Exception as e:
         click.echo(f"Error: {str(e)}", err=True)
