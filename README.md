@@ -25,11 +25,11 @@ Download the pre-built executable from the [latest release](https://github.com/m
 - **macOS (ARM64/M1/M2/M3)**: `exceldiff-macos`
 
 **Usage:**
+
+**For Linux:**
 ```bash
 # Download from releases page, then:
-
-# Make it executable (macOS/Linux)
-chmod +x exceldiff-linux  # or exceldiff-macos
+chmod +x exceldiff-linux
 
 # Move to a directory in your PATH (optional)
 sudo mv exceldiff-linux /usr/local/bin/exceldiff
@@ -37,6 +37,35 @@ sudo mv exceldiff-linux /usr/local/bin/exceldiff
 # Or use directly
 ./exceldiff-linux file1.xlsx file2.xlsx -o output.xlsx
 ```
+
+**For macOS:**
+```bash
+# Download from releases page, then:
+chmod +x exceldiff-macos
+
+# ⚠️ Important: Remove quarantine attribute (required for unsigned binaries)
+xattr -d com.apple.quarantine exceldiff-macos
+
+# Move to a directory in your PATH (optional)
+sudo mv exceldiff-macos /usr/local/bin/exceldiff
+
+# Or use directly
+./exceldiff-macos file1.xlsx file2.xlsx -o output.xlsx
+```
+
+**macOS Security Note:**
+
+Since the binary is not code-signed with an Apple Developer certificate, macOS will block it by default. You have two options:
+
+1. **Command line (recommended):**
+   ```bash
+   xattr -d com.apple.quarantine exceldiff-macos
+   ```
+
+2. **Using Finder:**
+   - Right-click the file → Open
+   - Click "Open" in the security dialog
+   - Or: System Settings → Privacy & Security → scroll down → click "Open Anyway"
 
 **No Python or dependencies required!** The executable includes everything needed to run.
 
