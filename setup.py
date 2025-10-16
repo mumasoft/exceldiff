@@ -13,5 +13,5 @@ setup(
             "exceldiff=exceldiff.cli:main",
         ],
     },
-    python_requires=">=3.8",
+    python_requires=">=3.13",
 )

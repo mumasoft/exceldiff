@@ -193,7 +193,7 @@ class CSVReader(FileReader):
 
 ## Requirements
 
-- Python 3.8+
+- Python 3.13+
 - openpyxl >= 3.1.2
 - click >= 8.1.7
 
