@@ -41,7 +41,6 @@ standalone_test.xlsx
 # PyInstaller
 build/
 dist/
-*.spec
 
 # macOS
 .DS_Store
